@@ -25,7 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_t%#h3y!))_l%2=+79v1^te(%dvs#nxule-w5j@$%2dn+jps$r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+DEBUG = False
+ALLOWED_HOSTS = ['daily_vlog_api.onrender.com']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 ALLOWED_HOSTS = []
 
