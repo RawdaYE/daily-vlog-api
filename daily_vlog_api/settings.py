@@ -32,7 +32,11 @@ SECRET_KEY = 'django-insecure-_t%#h3y!))_l%2=+79v1^te(%dvs#nxule-w5j@$%2dn+jps$r
 DEBUG = False
 
 
-ALLOWED_HOSTS = ['daily_vlog_api.onrender.com', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'daily-vlog-api.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
