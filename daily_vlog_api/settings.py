@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+
+SECRET_KEY = os.environ.get('SECRET_KEY', 'my-local-dev-key-for-testing')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,11 +30,9 @@ SECRET_KEY = 'django-insecure-_t%#h3y!))_l%2=+79v1^te(%dvs#nxule-w5j@$%2dn+jps$r
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = False
-ALLOWED_HOSTS = ['daily_vlog_api.onrender.com']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['daily_vlog_api.onrender.com', '127.0.0.1']
 
 
 # Application definition
@@ -149,7 +150,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
