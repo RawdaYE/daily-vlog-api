@@ -1,21 +1,61 @@
-from rest_framework import generics, permissions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from vlogs.models import Vlog
 from .models import Like
-from .serializers import LikeSerializer
 
-class LikeCreateView(generics.CreateAPIView):
-    queryset = Like.objects.all()
-    serializer_class = LikeSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
-class LikeListView(generics.ListAPIView):
-    serializer_class = LikeSerializer
-    permission_classes = [permissions.AllowAny]
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_vlog(request, id):
+    vlog = get_object_or_404(Vlog, id=id)
 
-    def get_queryset(self):
-        vlog_id = self.kwargs['vlog_id']
-        return Like.objects.filter(vlog=vlog_id)
+    like, created = Like.objects.get_or_create(
+        user=request.user,
+        vlog=vlog
+    )
 
-class LikeDeleteView(generics.DestroyAPIView):
-    queryset = Like.objects.all()
-    serializer_class = LikeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    if not created:
+        return Response(
+            {"detail": "Already liked"},
+            status=400
+        )
+
+    return Response(
+        {"detail": "Vlog liked"},
+        status=201
+    )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def unlike_vlog(request, id):
+    vlog = get_object_or_404(Vlog, id=id)
+
+    like = Like.objects.filter(
+        user=request.user,
+        vlog=vlog
+    )
+
+    if not like.exists():
+        return Response(
+            {"detail": "Not liked yet"},
+            status=400
+        )
+
+    like.delete()
+    return Response(
+        {"detail": "Like removed"},
+        status=200
+    )
+
+
+@api_view(['GET'])
+def vlog_likes(request, id):
+    vlog = get_object_or_404(Vlog, id=id)
+
+    return Response(
+        {"likes": vlog.likes.count()},
+        status=200
+    )

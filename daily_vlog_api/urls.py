@@ -19,11 +19,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/vlogs/', include('vlogs.urls')),
-    path('api/users/', include('users.urls')),
-    path('api/follows/', include('follows.urls')),
-    path('api/comments/', include('comments.urls')),
-    path('api/likes/', include('likes.urls')),
-
+    path('api/', include('users.urls')),
+    path('api/', include('likes.urls')),
+    path('api/', include('comments.urls')),
+    path('api/', include('follows.urls')),
+    path('api/', include('vlogs.urls')),
 ]
 

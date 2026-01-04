@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import VlogListCreateView, VlogDetailView
+from .views import VlogListView, VlogCreateView, VlogDetailView, FeedView
 
 urlpatterns = [
-    path('', VlogListCreateView.as_view(), name='vlog-list-create'),
-    path('<int:pk>/', VlogDetailView.as_view(), name='vlog-detail'),
+    path('vlogs/', VlogListView.as_view(), name='vlog-list'),
+    path('vlogs/', VlogCreateView.as_view(), name='vlog-create'),
+    path('vlogs/<int:pk>/', VlogDetailView.as_view(), name='vlog-detail'),
+    path('feed/', FeedView.as_view(), name='vlog-feed'),
 ]

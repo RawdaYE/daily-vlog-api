@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import LikeCreateView, LikeListView, LikeDeleteView
+from .views import like_vlog, unlike_vlog, vlog_likes
 
 urlpatterns = [
-    path('add/', LikeCreateView.as_view(), name='like-add'),
-    path('<int:vlog_id>/', LikeListView.as_view(), name='like-list'),
-    path('delete/<int:pk>/', LikeDeleteView.as_view(), name='like-delete'),
+    path('vlogs/<int:id>/like/', like_vlog),
+    path('vlogs/<int:id>/unlike/', unlike_vlog),
+    path('vlogs/<int:id>/likes/', vlog_likes),
 ]
