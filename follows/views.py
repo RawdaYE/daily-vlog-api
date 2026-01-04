@@ -1,34 +1,34 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import generics, permissions
 from .models import Follow
-from users.models import User
+from .serializers import FollowSerializer
 
-class FollowUserView(APIView):
-    def post(self, request, user_id):
-        follower = request.user
-        try:
-            following = User.objects.get(id=user_id)
-            if follower == following:
-                return Response({"error": "Cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
-            follow, created = Follow.objects.get_or_create(follower=follower, following=following)
-            if created:
-                return Response({"message": f"Now following {following.username}"})
-            else:
-                return Response({"message": "Already following"}, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+class FollowCreateView(generics.CreateAPIView):
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-class UnfollowUserView(APIView):
-    def delete(self, request, user_id):
-        follower = request.user
-        try:
-            following = User.objects.get(id=user_id)
-            follow = Follow.objects.filter(follower=follower, following=following)
-            if follow.exists():
-                follow.delete()
-                return Response({"message": f"Unfollowed {following.username}"})
-            else:
-                return Response({"error": "Not following this user"}, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+class UnfollowDestroyView(generics.DestroyAPIView):
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        follower = self.request.user
+        following_id = self.kwargs['following_id']
+        return Follow.objects.get(follower=follower.id, following=following_id)
+
+class FollowersListView(generics.ListAPIView):
+    serializer_class = FollowSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        return Follow.objects.filter(following=user_id)
+
+class FollowingListView(generics.ListAPIView):
+    serializer_class = FollowSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        return Follow.objects.filter(follower=user_id)

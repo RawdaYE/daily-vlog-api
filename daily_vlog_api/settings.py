@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'vlogs',
     'users',
     'follows',
+    'comments',
+    'likes',
 ]
 AUTH_USER_MODEL = 'users.User'
 

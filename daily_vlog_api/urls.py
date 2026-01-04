@@ -22,5 +22,8 @@ urlpatterns = [
     path('api/vlogs/', include('vlogs.urls')),
     path('api/users/', include('users.urls')),
     path('api/follows/', include('follows.urls')),
+    path('api/comments/', include('comments.urls')),
+    path('api/likes/', include('likes.urls')),
+
 ]
 
